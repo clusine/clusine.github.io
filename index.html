@@ -3,9 +3,7 @@ layout: page
 description: "Boilerplate"
 ---
 
-{% for post in paginator.posts %}
-<img src="/apple-touch-icon.png">
-<img src="/favicon.ico">
+{% for post in paginator.posts %}">
 <div class="post-preview">
     <a href="{{ post.url | prepend: site.baseurl }}">
         <h2 class="post-title">
