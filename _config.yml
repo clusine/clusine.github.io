@@ -35,7 +35,7 @@ anchorjs: false                          # if you want to customize anchor. chec
 
 # Gems
 # from PR#40, to support local preview for Jekyll 3.0
-gems: [jekyll-paginate]
+gems: [jekyll-paginate,jekyll-sitemap]
 
 
 
@@ -87,3 +87,7 @@ friends: [
         href: "https://clusine.github.io"
     }
 ]
+
+plugins:
+  - jekyll-paginate
+  - jekyll-sitemap

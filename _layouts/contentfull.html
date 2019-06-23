@@ -9,40 +9,31 @@ layout: default
 <!-- Post Header -->
 <style type="text/css">
     header.intro-header{
-        /*background-image: url('{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}')*/
-        height: 500px;
-        overflow: hidden;
-    }
-    header iframe{
-        width: 100%;
-        height: 100%;
-        border: 0;
+        background-image: url('{{ site.baseurl }}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}')
     }
 </style>
 <header class="intro-header" >
-    <iframe src="{{page.iframe}}"/>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                    <div class="post-heading">
-                        <div class="tags">
-                            {% for tag in page.tags %}
-                            <a class="tag" href="{{ site.baseurl }}/tags/#{{ tag }}" title="{{ tag }}">{{ tag }}</a>
-                            {% endfor %}
-                        </div>
-                        <h1>{{ page.title }}</h1>
-                        {% comment %}
-                            always create a h2 for keeping the margin , Hux
-                        {% endcomment %}
-                        {% comment %} if page.subtitle {% endcomment %}
-                        <h2 class="subheading">{{ page.subtitle }}</h2>
-                        {% comment %} endif {% endcomment %}
-                        <span class="meta">Posted by {% if page.author %}{{ page.author }}{% else %}{{ site.title }}{% endif %} on {{ page.date | date: "%B %-d, %Y" }}</span>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="post-heading">
+                    <div class="tags">
+                        {% for tag in page.tags %}
+                        <a class="tag" href="{{ site.baseurl }}/tags/#{{ tag }}" title="{{ tag }}">{{ tag }}</a>
+                        {% endfor %}
                     </div>
+                    <h1>{{ page.title }}</h1>
+                    {% comment %}
+                        always create a h2 for keeping the margin , Hux
+                    {% endcomment %}
+                    {% comment %} if page.subtitle {% endcomment %}
+                    <h2 class="subheading">{{ page.subtitle }}</h2>
+                    {% comment %} endif {% endcomment %}
+                    <span class="meta">{% if page.author %}{{ page.author }}{% else %}{{ site.title }}{% endif %} on {{ page.date | date: "%B %-d, %Y" }}</span>
                 </div>
             </div>
         </div>
-    </iframe>
+    </div>
 </header>
 
 <!-- Post Content -->
@@ -50,24 +41,25 @@ layout: default
     <div class="container">
         <div class="row">
 
-            <!-- Post Container -->
-            <div class="post-container
-                col-lg-8 col-lg-offset-2
-                col-md-10 col-md-offset-1 ">
+    <!-- Post Container -->
+            <div class="
+                col-lg-12
+                post-container">
 
 				{{ content }}
 
                 <hr>
 
-                {% if site.duoshuo_share and site.duoshuo_username %}
+                {% if site.duoshuo_share && site.duoshuo_username %}
                 <!-- 多说 Share start -->
                 </style>
                 <div class="ds-share"
                     style="text-align: right"
-                    data-thread-key="{{page.id}}" data-title="{{page.title}}"
+                    data-thread-key="{{page.id}}"
+                    data-title="{{page.title}}"
+                    data-url="{{site.url}}{{site.baseurl}}{{page.url}}"
                     data-images="{{ site.url }}{{site.baseurl}}/{% if page.header-img %}{{ page.header-img }}{% else %}{{ site.header-img }}{% endif %}"
-                    data-content="{{ content | strip_html | truncate:80 }} | Hux Blog，@Hux黄玄 的个人博客"
-                    data-url="{{site.url}}{{site.baseurl}}{{page.url}}">
+                    data-content="{{ content | strip_html | truncate:80 }} | {{ site.SEOTitle }} " >
                     <div class="ds-share-inline">
                       <ul  class="ds-share-icons-16">
                         <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li>
@@ -80,7 +72,7 @@ layout: default
                     </div>
                 <hr>
                 </div>
-                <!-- 多少 Share end-->
+                <!-- 多说 Share end-->
                 {% endif %}
 
 
@@ -113,48 +105,49 @@ layout: default
                 {% if site.disqus_username %}
                 <!-- disqus 评论框 start -->
                 <div class="comment">
-                    <div id="disqus_thread" class="disqus-thread">
-
-                    </div>
+                    <div id="disqus_thread" class="disqus-thread"></div>
                 </div>
                 <!-- disqus 评论框 end -->
                 {% endif %}
 
             </div>
 
-            <!-- Sidebar Container -->
-            <div class="sidebar-container
-                col-lg-8 col-lg-offset-2
-                col-md-10 col-md-offset-1 ">
+    <!-- Sidebar Container -->
+            <div class="
+                col-12
+                sidebar-container">
 
-                {% include sidebar.html %}
+                <!-- Featured Tags -->
+                {% if site.featured-tags %}
+                <section>
+                    <hr class="hidden-sm hidden-xs">
+                    <h5><a href="/tags/">FEATURED TAGS</a></h5>
+                    <div class="tags">
+        				{% for tag in site.tags %}
+                            {% if tag[1].size > {{site.featured-condition-size}} %}
+                				<a href="{{ site.baseurl }}/tags/#{{ tag[0] }}" title="{{ tag[0] }}" rel="{{ tag[1].size }}">
+                                    {{ tag[0] }}
+                                </a>
+                            {% endif %}
+        				{% endfor %}
+        			</div>
+                </section>
+                {% endif %}
+
+                <!-- Friends Blog -->
+                {% if site.friends %}
+                <hr>
+                <h5>FRIENDS</h5>
+                <ul class="list-inline">
+                    {% for friend in site.friends %}
+                        <li><a href="{{friend.href}}">{{friend.title}}</a></li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
             </div>
         </div>
     </div>
 </article>
-
-<!-- resize header to fullscreen keynotes -->
-<script>
-    var $header = document.getElementsByTagName("header")[0];
-    function resize(){
-        /*
-         * leave 85px to both
-         * - told/imply users that there has more content below
-         * - let user can scroll in mobile device, seeing the keynote-view is unscrollable
-         */
-        $header.style.height = (window.innerHeight-85) + 'px';
-    }
-    document.addEventListener('DOMContentLoaded', function(){
-        resize();
-    })
-    window.addEventListener('load', function(){
-        resize();
-    })
-    window.addEventListener('resize', function(){
-        resize();
-    })
-    resize();
-</script>
 
 {% if site.duoshuo_username %}
 <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
